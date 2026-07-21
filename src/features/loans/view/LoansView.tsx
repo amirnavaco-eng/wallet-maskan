@@ -14,7 +14,7 @@ export function LoansView() {
 
   return (
     <PullToRefresh onRefresh={refresh}>
-      <div className="animate-in stagger flex flex-col gap-5 px-4 pb-4 pt-6">
+      <div className="animate-in stagger flex min-w-0 flex-col gap-5 px-4 pb-4 pt-6">
         <div className="px-1">
           <Typography variant="subtitle1" fontWeight={800}>
             مدیریت تسهیلات
@@ -46,7 +46,10 @@ export function LoansView() {
               usedAmount={summary.usedAmount}
               remainingAmount={summary.remainingAmount}
             />
-            <NextInstallmentCard date={summary.nextInstallmentDate} amount={summary.nextInstallmentAmount} />
+            <NextInstallmentCard
+              date={summary.nextInstallmentDate}
+              amount={summary.nextInstallmentAmount}
+            />
           </>
         )}
       </div>

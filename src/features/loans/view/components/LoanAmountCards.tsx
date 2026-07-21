@@ -25,7 +25,7 @@ function AmountCard({
   }[variant];
 
   return (
-    <div className={`flex-1 rounded-xl2 p-4 shadow-soft ${styles}`}>
+    <div className={`min-w-0 flex-1 rounded-xl2 p-4 shadow-soft ${styles}`}>
       <Typography
         variant="caption"
         sx={{ opacity: variant === "remaining" ? 0.85 : undefined }}
@@ -40,12 +40,25 @@ function AmountCard({
   );
 }
 
-export function LoanAmountCards({ totalAmount, usedAmount, remainingAmount }: LoanAmountCardsProps) {
+export function LoanAmountCards({
+  totalAmount,
+  usedAmount,
+  remainingAmount,
+}: LoanAmountCardsProps) {
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-col gap-3">
+      {/* مبلغ کل - تک کارت بالا */}
       <AmountCard label="مبلغ کل" amount={totalAmount} variant="total" />
-      <AmountCard label="استفاده شده" amount={usedAmount} variant="used" />
-      <AmountCard label="باقی‌مانده" amount={remainingAmount} variant="remaining" />
+
+      {/* دو کارت پایین */}
+      <div className="flex gap-3">
+        <AmountCard label="استفاده شده" amount={usedAmount} variant="used" />
+        <AmountCard
+          label="باقی‌مانده"
+          amount={remainingAmount}
+          variant="remaining"
+        />
+      </div>
     </div>
   );
 }
