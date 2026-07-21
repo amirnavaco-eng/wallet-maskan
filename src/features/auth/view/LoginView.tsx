@@ -6,7 +6,8 @@ import { useLoginViewModel } from "../viewmodel/useLoginViewModel";
 import { GirihPattern } from "@/shared/components/GirihPattern";
 
 export function LoginView() {
-  const { register, onSubmit, errors, isValid, isSubmitting } = useLoginViewModel();
+  const { register, onSubmit, errors, isValid, isSubmitting } =
+    useLoginViewModel();
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -18,7 +19,12 @@ export function LoginView() {
             "radial-gradient(120% 120% at 20% 0%, #FFB366 0%, transparent 55%), linear-gradient(160deg, #FF8A3D 0%, #F76B1C 50%, #BC420B 100%)",
         }}
       >
-        <GirihPattern id="login-girih" className="absolute inset-0" opacity={0.12} size={54} />
+        <GirihPattern
+          id="login-girih"
+          className="absolute inset-0"
+          opacity={0.12}
+          size={54}
+        />
         <div className="pointer-events-none absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-black/10" />
         <div className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-white/10" />
 
@@ -26,10 +32,19 @@ export function LoginView() {
           <div className="glow-pulse mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-white/95 text-brand-600">
             <HomeRoundedIcon sx={{ fontSize: 40 }} />
           </div>
-          <Typography variant="h5" fontWeight={800} color="white" textAlign="center">
+          <Typography
+            variant="h5"
+            fontWeight={800}
+            color="white"
+            textAlign="center"
+          >
             بانک مسکن
           </Typography>
-          <Typography variant="body2" textAlign="center" sx={{ mt: 1, color: "rgba(255,255,255,0.9)" }}>
+          <Typography
+            variant="body2"
+            textAlign="center"
+            sx={{ mt: 1, color: "rgba(255,255,255,0.9)" }}
+          >
             کیف پول دیجیتال، همراه همیشگی خانه شما
           </Typography>
         </div>
@@ -50,7 +65,21 @@ export function LoginView() {
               autoFocus
               error={!!errors.mobileNumber}
               helperText={errors.mobileNumber?.message}
-              slotProps={{ htmlInput: { maxLength: 11 } }}
+              slotProps={{
+                htmlInput: {
+                  maxLength: 11,
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                  dir: "ltr",
+                  style: { textAlign: "right" },
+                },
+              }}
+              onKeyPress={(e) => {
+                // فقط اعداد مجاز هستند
+                if (!/[0-9]/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
             />
           </div>
 
@@ -65,7 +94,12 @@ export function LoginView() {
             {isSubmitting ? "در حال ارسال کد..." : "ادامه"}
           </Button>
 
-          <Typography variant="caption" color="text.secondary" textAlign="center" sx={{ mt: 2 }}>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            textAlign="center"
+            sx={{ mt: 2 }}
+          >
             با ادامه، شرایط و قوانین بانک مسکن را می‌پذیرید.
           </Typography>
         </form>

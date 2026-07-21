@@ -23,7 +23,7 @@ export function BalanceSection({
     <div className="relative overflow-hidden rounded-xl3 bg-white p-5 shadow-soft">
       <div className="flex items-center justify-between">
         <Typography variant="caption" color="text.secondary" fontWeight={600}>
-          موجودی کیف پول
+          موجودی کارت
         </Typography>
         <IconButton
           size="small"

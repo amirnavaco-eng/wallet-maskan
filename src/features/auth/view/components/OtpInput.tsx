@@ -10,7 +10,13 @@ interface OtpInputProps {
   disabled?: boolean;
 }
 
-export function OtpInput({ code, onChangeDigit, length, hasError, disabled }: OtpInputProps) {
+export function OtpInput({
+  code,
+  onChangeDigit,
+  length,
+  hasError,
+  disabled,
+}: OtpInputProps) {
   const inputsRef = React.useRef<Array<HTMLInputElement | null>>([]);
 
   React.useEffect(() => {
@@ -25,14 +31,20 @@ export function OtpInput({ code, onChangeDigit, length, hasError, disabled }: Ot
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Backspace" && !code[index] && index > 0) {
       inputsRef.current[index - 1]?.focus();
     }
   };
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, length);
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, length);
     if (!pasted) return;
     e.preventDefault();
     pasted.split("").forEach((digit, i) => onChangeDigit(i, digit));
@@ -40,7 +52,7 @@ export function OtpInput({ code, onChangeDigit, length, hasError, disabled }: Ot
   };
 
   return (
-    <div className="flex flex-row-reverse justify-center gap-3" dir="ltr">
+    <div className="flex justify-center gap-3" dir="ltr">
       {Array.from({ length }).map((_, index) => (
         <input
           key={index}

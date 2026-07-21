@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { IconButton, Typography } from "@mui/material";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
@@ -28,6 +29,7 @@ interface BankCardProps {
  * with the everyday card face, the back is a deep midnight gradient revealing
  * the account number and Sheba (IBAN) with copy actions. Tapping the rotate
  * icon (or the card itself) flips it with a real 3D transform.
+ * Now supports swipe gesture to flip!
  */
 export function BankCard({
   card,
@@ -37,11 +39,41 @@ export function BankCard({
   onToggleFlip,
   onCopy,
 }: BankCardProps) {
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0]?.clientX ?? null);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0]?.clientX ?? null);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe || isRightSwipe) {
+      onToggleFlip();
+    }
+  };
+
   return (
     <div className="">
       <div
         className="relative h-56 w-full transition-transform duration-700 [transform-style:preserve-3d]"
         style={{ transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
         {/* ---------------------------------------------------------------- */}
         {/* FRONT — sunset / "day"                                          */}

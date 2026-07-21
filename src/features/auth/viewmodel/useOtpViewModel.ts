@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { authService } from "@/lib/api/services";
 import { useCountdown } from "@/shared/hooks/useCountdown";
@@ -16,7 +16,8 @@ export function useOtpViewModel(mobileNumber: string) {
   const { showToast } = useToast();
   const [code, setCode] = useState<string[]>(Array(OTP_LENGTH).fill(""));
   const [status, setStatus] = useState<VerifyStep>("idle");
-  const { secondsLeft, isRunning, restart } = useCountdown(OTP_DURATION_SECONDS);
+  const { secondsLeft, isRunning, restart } =
+    useCountdown(OTP_DURATION_SECONDS);
 
   const codeString = code.join("");
   const isComplete = codeString.length === OTP_LENGTH && !code.includes("");
@@ -36,7 +37,10 @@ export function useOtpViewModel(mobileNumber: string) {
     if (!isComplete) return;
     setStatus("verifying");
     try {
-      const response = await authService.verifyOtp({ mobileNumber, otpCode: codeString });
+      const response = await authService.verifyOtp({
+        mobileNumber,
+        otpCode: codeString,
+      });
       if (response.success) {
         setStatus("success");
         if (typeof window !== "undefined") {
@@ -52,6 +56,13 @@ export function useOtpViewModel(mobileNumber: string) {
       showToast("خطا در برقراری ارتباط. دوباره تلاش کنید.", "error");
     }
   };
+
+  // Auto-submit when all digits are entered
+  useEffect(() => {
+    if (isComplete && status === "idle") {
+      verify();
+    }
+  }, [isComplete, status]);
 
   const resend = async () => {
     if (isRunning) return;
